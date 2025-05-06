@@ -1,91 +1,666 @@
+<!DOCTYPE html>
 <html>
-
 <head>
-    <!-- Google tag (gtag.js) -->
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware.">
+  <meta name="keywords" content="NeRF, GS, Gaussian Splatting, Feature Fields, Robotics">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware</title>
 
-    <meta charset="utf-8" />
-    <title>Real2Render2Real</title>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script> -->
+  <!-- <script>
+    window.dataLayer = window.dataLayer || [];
 
-    <!-- TODO double check these are updated -->
-    <!-- Website Metadata -->
+    function gtag() {
+      dataLayer.push(arguments);
+    }
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous" />
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
-    <script
-        type="text/javascript">WebFont.load({ google: { families: ["Lato:100,100italic,300,300italic,400,400italic,700,700italic,900,900italic", "Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic", "Ubuntu:300,300italic,400,400italic,500,500italic,700,700italic", "Open Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic", "Changa One:400,400italic", "Varela Round:400", "Bungee Shade:regular", "Roboto:300,regular,500", "Bungee Outline:regular"] } });</script>
-    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif]-->
+    gtag('js', new Date());
 
-    <!-- JQuery, scripts etc -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script src="script.js" type="text/javascript"></script>
-    <script src="js/carousel_utils.js" type="text/javascript"></script>
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
 
-    <!-- Stylesheets; tabler icons, fonts, ...-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
 
-    <link href="style.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./media/pog.jpeg">
 
-    <link href="data/favicon.png" rel="shortcut icon" type="image/x-icon" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
 </head>
-
 <body>
-    <div>
-        <!-- Title, Subtitle, Authors -->
-        <div>
-            <h1 class="title">
-                Real2Render2Real
-            </h1>
-            <h1 class="subheader">Scaling Robotic Manipulation
-              Data Without Simulation or Robot Hardware</h1>
-            <!-- Author list -->
-            <div class="base-row">
-                <!-- Refer to how author wrapping is performed in https://brentyi.github.io/tilted/ -->
-                <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-                    <div>
-                        <a href="https://real2render2real.github.io" target="_blank" class="author-text">
-                            anonymous
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- <div style="text-align: center">
-                <h1 id="affil">Affiliation</h1>
-                <span class="text-star">*</span>
-                Denotes Equal Contribution
-            </div> -->
-        </div>
-        <!-- Submission status -->
-        <div class="title-row">
-            <h2 class="subheader">Under Review CoRL 2025</h1>
-        </div>
 
-        <div class="section">
-            <h1 class="section-title">Website is currently under construction, interactive videos along with code and paper coming soon!</h1>
-        </div>
 
-        <!-- TL;DR + Teaser video -->
-        <div class="section base-row add-top-padding">
-            <h1 class="tldr">
-                <b>TL;DR</b>:
-                Real2Render2Real...
-            </h1>
-            <video id="main-video" autobuffer muted autoplay loop controls playsinline>
-                <source id="mp4" src="data/vid.mp4" type="video/mp4">
-            </video>
-        </div>
-        
-        <footer>
-            <div class="section" style="margin-top: 40px;">
-                <p class="paragraph">
-                    The website template is adapted from the <a class="author-text" href="https://www.garfield.studio">GARField</a> and <a class="author-text" href="https://robot-see-robot-do.github.io/">Robot See Robot Do</a>
-                    project page.
-                </p>
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://real2render2real.github.io">Anonymous</a>
+            </span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              Under Review CoRL 2025
+            </span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://real2render2real.github.io" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- arXiv Link. -->
+              <span class="link-block">
+                <a href="https://real2render2real.github.io"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://real2render2real.github.io" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://real2render2real.github.io"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
             </div>
-        </footer>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./media/"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        <b>Real2Render2Real</b> scales robotic manipulation data without simulation or robot hardware.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <!-- <div id="results-carousel" class="carousel results-carousel"> -->
+          <video poster="" id="steve" autoplay muted loop playsinline height="100%">
+            <source src="./media/"
+                    type="video/mp4">
+          </video>
+          <h2 class="subtitle has-text-centered">
+            <span class="dnerf"><b>Real2Render2Real</b></span> scales robotic manipulation data without simulation or robot hardware.
+          </h2>
+      </div>
+    <!-- </div> -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Scaling robot learning requires vast and diverse datasets. Yet
+            the prevailing data collection paradigm—human teleoperation—remains costly
+            and constrained by manual effort and physical robot access. We introduce
+            <b>Real2Render2Real (R2R2R)</b>, a scalable pipeline for generating robot training
+            data without physics simulation or teleoperation. Using a smartphone-captured
+            scan of one or more objects and a single monocular human demonstration, R2R2R
+            reconstructs detailed 3D object geometry and appearance, tracks 6-DoF object mo-
+            tion, and synthesizes thousands of physically plausible, robot-agnostic demonstra-
+            tions through parallel-environment photorealistic rendering and inverse kinematics.
+            R2R2R uses 3D Gaussian Splatting (3DGS) to enable flexible asset generation
+            and trajectory synthesis for both rigid and articulated objects, converting these
+            representations to meshes to maintain compatibility with scalable rendering en-
+            gines. Data generated by R2R2R integrates directly with models that operate on
+            robot proprioceptive states and image observations, such as vision-language-action
+            models (VLA) and imitation learning policies. Physical experiments suggest that
+            models trained on R2R2R data alone can achieve comparable performance to those
+            trained on teleoperated demonstrations, with model performance scaling with the
+            amount and diversity of R2R2R data, while requiring <b>1/27</b> of the time to generate.
+            By decoupling data generation from physical robot constraints, R2R2R enables the
+            computational scaling of robot datasets to support increasingly capable generalist
+            policies.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Results</h2>
+        <div class="base-row add-top-padding">
+          <style>
+              /* Base styles */
+              body {
+                  font-family: Arial, sans-serif;
+                  margin: 0;
+                  padding: 20px;
+                  box-sizing: border-box;
+              }
+              
+              * {
+                  box-sizing: border-box;
+              }
+
+              /* Container for vertical content */
+              .content-container {
+                  display: flex;
+                  flex-direction: column;
+                  width: 100%;
+                  max-width: 100%;
+                  align-items: center;
+                  box-sizing: border-box;
+                  padding: 0 15px;
+              }
+
+              /* Row for horizontal content */
+              .base-row {
+                  display: flex;
+                  flex-direction: row;
+                  width: 100%;
+                  justify-content: left;
+                  align-items: center;
+              }
+
+              /* Heading style */
+              .results-text {
+                  text-align: center;
+                  margin-bottom: 15px;
+              }
+
+              /* Iframe container */
+              /* .iframe-container {
+                  position: relative;
+                  width: 100%;
+                  max-width: 960px;
+                  height: 540px;
+                  margin: 0 auto;
+              } */
+
+              .iframe-container {
+                  position: relative;
+                  width: 100%;
+                  max-width: 1200px;
+                  height: 490px;
+                  margin: 30px auto;
+                  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                  border-radius: 8px;
+                  overflow: hidden;
+                  transition: all 0.3s ease;
+              }
+
+              .iframe-container:hover {
+                  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+                  transform: translateY(-1px);
+              }
+
+              .iframe {
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  border: none;
+                  display: none;
+              }
+
+              .iframe.show {
+                  display: block;
+              }
+
+              /* Fullscreen button container */
+              .fullscreen-container {
+                  text-align: right;
+                  margin: 10px auto;
+                  width: 100%;
+                  max-width: 960px;
+              }
+
+              .fullscreen-btn {
+                  background: none;
+                  border: 1px solid #ccc;
+                  cursor: pointer;
+                  padding: 5px 10px;
+                  border-radius: 4px;
+              }
+
+              /* Thumbnails */
+              .thumbnail-navigation {
+                  display: inline-block;
+                  margin-top: 15px;
+              }
+              .thumbnail-container {
+                  /* width: 100%; */
+                  /* max-width: 960px; */
+                  /* margin: 15px auto; */
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  justify-content: center;
+              }
+              .thumbnail-row {
+                  display: flex;
+                  overflow-x: auto;
+                  scroll-behavior: smooth;
+                  max-width: 800px;
+              }
+
+              .thumbnail-col {
+                  flex: 0 0 auto;
+                  margin: 0 5px;
+              }
+
+              .thumbnail-btn {
+                  background: none;
+                  border: 1px solid #ccc;
+                  padding: 5px;
+                  cursor: pointer;
+                  width: 220px;
+                  text-align: center;
+                  border-radius: 5px;
+              }
+
+              .thumbnail-btn.active-btn {
+                  border-color: #2196F3;
+                  background-color: #e6f3ff;
+              }
+
+              .thumbnails {
+                  width: 200px;
+                  height: 120px;
+                  object-fit: cover;
+                  margin-bottom: 5px;
+                  border-radius: 3px;
+              }
+
+              .slide-arrow {
+                  background: none;
+                  border: none;
+                  font-size: 24px;
+                  cursor: pointer;
+                  padding: 0 10px;
+              }
+          </style>
+        <div class="content-container">
+          <!-- Heading -->
+          <h3 class="results-text">
+              <b>Results are included below...</b>
+          </h3>
+  
+          <!-- Iframe Container - This will hold all your iframes -->
+          <div id="iframe-container" class="iframe-container">
+          </div>
+      
+          <!-- Fullscreen button -->
+          <div class="fullscreen-container">
+              <button class="fullscreen-btn" onclick="toggleFullscreen()">
+                  Toggle Fullscreen
+              </button>
+          </div>
+      
+          <!-- Thumbnail Navigation -->
+          <div class="thumbnail-container" style="display: inline-block">
+              <!-- <button class="slide-arrow" id="slide-arrow-prev" onclick="slideLeft()">‹</button> -->
+              <div class="thumbnail-row" id="thumbnails-scroll">
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn active-btn" id="thumb-0" onclick="showIframe('drill_scene1')">
+                          <img src="./media/thumbnails/drill_scene1.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Drill #1 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-1" onclick="showIframe('drill_scene2')">
+                          <img src="./media/thumbnails/drill_scene2.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Drill #2 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-2" onclick="showIframe('drill_scene3')">
+                          <img src="./media/thumbnails/drill_scene3.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Drill #3 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-3" onclick="showIframe('drill_scene4')">
+                          <img src="./media/thumbnails/drill_scene4.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Drill #4 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-4" onclick="showIframe('iron_shelf_pick1')">
+                          <img src="./media/thumbnails/iron_shelf_pick1.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Iron Shelf Pick #1 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-5" onclick="showIframe('iron_shelf_place1')">
+                          <img src="./media/thumbnails/iron_shelf_place1.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Iron Shelf Place #1 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-6" onclick="showIframe('iron_shelf_pick2')">
+                          <img src="./media/thumbnails/iron_shelf_pick2.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Iron Shelf Pick #2 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-7" onclick="showIframe('iron_shelf_place2')">
+                          <img src="./media/thumbnails/iron_shelf_place2.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Iron Shelf Place #2 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-8" onclick="showIframe('shoe_shoebox_pick1')">
+                          <img src="./media/thumbnails/shoe_shoebox_pick1.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Shoe Shoebox Pick #1 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-9" onclick="showIframe('shoe_shoebox_place1')">
+                          <img src="./media/thumbnails/shoe_shoebox_place1.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Shoe Shoebox Place #1 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-10" onclick="showIframe('shoe_shoebox_pick2')">
+                        <img src="./media/thumbnails/shoe_shoebox_pick2.jpeg" alt="Item 1" class="thumbnails">
+                        <!-- <br> 
+                          Shoe Shoebox Pick #2 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-11" onclick="showIframe('shoe_shoebox_place2')">
+                          <img src="./media/thumbnails/shoe_shoebox_place2.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Shoe Shoebox Place #2 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-12" onclick="showIframe('jigsaw_shelf_pick1')">
+                        <img src="./media/thumbnails/jigsaw_shelf_pick1.jpeg" alt="Item 1" class="thumbnails">
+                        <!-- <br>
+                          Jigsaw Shelf Pick #1 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-13" onclick="showIframe('jigsaw_shelf_place1')">
+                        <img src="./media/thumbnails/jigsaw_shelf_place1.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br>
+                          Jigsaw Shelf Place #1 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-14" onclick="showIframe('jigsaw_shelf_pick2')">
+                          <img src="./media/thumbnails/jigsaw_shelf_pick2.jpeg" alt="Item 1" class="thumbnails">
+                          <!-- <br> 
+                          Jigsaw Shelf Pick #2 -->
+                      </button>
+                  </div>
+                  <div class="thumbnail-col">
+                      <button class="thumbnail-btn" id="thumb-15" onclick="showIframe('jigsaw_shelf_place2')">
+                        <img src="./media/thumbnails/jigsaw_shelf_place2.jpeg" alt="Item 1" class="thumbnails">
+                        <!-- <br> 
+                          Jigsaw Shelf Place #2 -->
+                      </button>
+                  </div>
+
+              </div>
+              <!-- <button class="slide-arrow" id="slide-arrow-next" onclick="slideRight()">›</button> -->
+          </div>
+          <style>
+            /* Thumbnail navigation with proper alignment */
+            .thumbnail-navigation {
+                width: 100%;
+                max-width: 960px;
+                margin: 15px auto;
+            }
+            
+            .thumbnail-row-container {
+                width: 100%;
+                position: relative;
+                padding-bottom: 10px; /* Space for scrollbar */
+            }
+            
+            .thumbnail-row {
+                display: flex;
+                overflow-x: auto;
+                scroll-behavior: smooth;
+                width: 100%;
+                padding-left: 0; /* Ensure no left padding */
+                margin-left: 0; /* Ensure no left margin */
+                
+                /* Custom scrollbar styling */
+                scrollbar-width: thin; /* Firefox */
+                scrollbar-color: #2196F3 #f1f1f1; /* Firefox */
+            }
+            
+            /* Custom scrollbar for Chrome, Safari, and Opera */
+            .thumbnail-row::-webkit-scrollbar {
+                height: 8px;
+            }
+            
+            .thumbnail-row::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
+            
+            .thumbnail-row::-webkit-scrollbar-thumb {
+                background: #2196F3;
+                border-radius: 10px;
+            }
+            
+            .thumbnail-row::-webkit-scrollbar-thumb:hover {
+                background: #0b7dda;
+            }
+            
+            .thumbnail-col {
+                flex: 0 0 auto;
+                margin: 0 5px;
+            }
+            
+            .thumbnail-col:first-child {
+                margin-left: 0; /* Remove left margin for first thumbnail */
+            }
+            
+            .thumbnail-btn {
+                background: none;
+                border: 1px solid #ccc;
+                padding: 5px;
+                cursor: pointer;
+                width: 220px;
+                text-align: center;
+                border-radius: 5px;
+            }
+            
+            .thumbnail-btn.active-btn {
+                border-color: #2196F3;
+                background-color: #e6f3ff;
+            }
+            
+            .thumbnails {
+                width: 200px;
+                height: 120px;
+                object-fit: cover;
+                margin-bottom: 5px;
+                border-radius: 3px;
+            }
+            </style>
+            
+            <script>
+            // Show specific iframe and update active thumbnail
+            function showIframe(iframeId) {
+                // Hide all iframes
+                document.querySelectorAll('.iframe').forEach(iframe => {
+                    iframe.classList.remove('show');
+                });
+                
+                // Show the selected iframe
+                const iframe = document.getElementById(iframeId);
+                if (iframe) {
+                    iframe.classList.add('show');
+                }
+                
+                // Update active thumbnail
+                const thumbnails = document.querySelectorAll('.thumbnail-btn');
+                thumbnails.forEach(thumb => {
+                    thumb.classList.remove('active-btn');
+                });
+                
+                // Find the thumbnail button associated with this iframe and scroll to it
+                for (let i = 0; i < thumbnails.length; i++) {
+                    if (thumbnails[i].onclick.toString().includes(iframeId)) {
+                        thumbnails[i].classList.add('active-btn');
+                        
+                        // Scroll the thumbnail into view (centered if possible)
+                        const thumbnailCol = thumbnails[i].closest('.thumbnail-col');
+                        if (thumbnailCol) {
+                            const container = document.getElementById('thumbnails-scroll');
+                            const scrollLeft = thumbnailCol.offsetLeft - (container.clientWidth / 2) + (thumbnailCol.clientWidth / 2);
+                            container.scrollTo({
+                                left: Math.max(0, scrollLeft),
+                                behavior: 'smooth'
+                            });
+                        }
+                        break;
+                    }
+                }
+              }
+      
+              // Scroll thumbnails left
+              function slideLeft() {
+                  document.getElementById('thumbnails-scroll').scrollBy({
+                      left: -300,
+                      behavior: 'smooth'
+                  });
+              }
+      
+              // Scroll thumbnails right
+              function slideRight() {
+                  document.getElementById('thumbnails-scroll').scrollBy({
+                      left: 300,
+                      behavior: 'smooth'
+                  });
+              }
+      
+              // Fullscreen toggle
+              function toggleFullscreen() {
+                  const container = document.getElementById('iframe-container');
+                  if (document.fullscreenElement) {
+                      document.exitFullscreen();
+                  } else {
+                      container.requestFullscreen().catch(err => {
+                          console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                      });
+                  }
+              }
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{real2render2real,
+  title     = {Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware},
+  year      = {2025},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://real2render2real.github.io" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            The website template is adapted from the <a class="author-text" href="https://www.nerfies.github.io/  ">Nerfies</a> project page.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>
