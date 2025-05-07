@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware.">
+  <meta name="keywords" content="NeRF, GS, Gaussian Splatting, Feature Fields, Robotics">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script> -->
+  <!-- <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./data/favicon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="script.js" type="text/javascript"></script>
+  <script src="js/carousel_utils.js" type="text/javascript"></script>
+
+  <!-- Stylesheets; tabler icons, fonts, ...-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title" style="margin-bottom: 1.5rem;">Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware</h1>
+          <div class="is-size-5 publication-authors" style="margin-bottom: 0.5rem;">
+            <span class="author-block">
+              <a href="https://real2render2real.github.io">Anonymous</a>
+            </span>
+          </div>
+          <div class="is-size-5 publication-authors" style="margin-bottom: 1rem;">
+            <span class="author-block">
+              Under Review CoRL 2025
+            </span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://real2render2real.github.io" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- arXiv Link. -->
+              <span class="link-block">
+                <a href="https://real2render2real.github.io"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://real2render2real.github.io" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://real2render2real.github.io"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./media/"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        <b>Real2Render2Real</b> scales robotic manipulation data without simulation or robot hardware.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <!-- <div id="results-carousel" class="carousel results-carousel"> -->
+          <video poster="" id="steve" autoplay muted loop playsinline height="100%">
+            <source src="./media/"
+                    type="video/mp4">
+          </video>
+          <h2 class="subtitle has-text-centered">
+            <span class="dnerf"><b>Real2Render2Real</b></span> scales robotic manipulation data without simulation or robot hardware.
+          </h2>
+      </div>
+    <!-- </div> -->
+  </div>
+</section>
+
+<!-- TL;DR + Teaser video -->
+<div class="section base-row add-top-padding">
+  <h1 class="tldr">
+      <b>TL;DR</b>:
+      Robot See Robot Do uses a <b>4D</b> <b>D</b>ifferentiable <b>P</b>art <b>M</b>odel (4D-DPM) to visually imitate articulated motions from an object scan and single monocular video.
+  </h1>
+  <video id="main-video" autobuffer muted autoplay loop controls playsinline>
+      <source id="mp4" src="data/r2r2r_teaser.mp4" type="video/mp4">
+  </video>
+</div>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Scaling robot learning requires vast and diverse datasets. Yet
+            the prevailing data collection paradigm—human teleoperation—remains costly
+            and constrained by manual effort and physical robot access. We introduce
+            <b>Real2Render2Real (R2R2R)</b>, a scalable pipeline for generating robot training
+            data without physics simulation or teleoperation. Using a smartphone-captured
+            scan of one or more objects and a single monocular human demonstration, R2R2R
+            reconstructs detailed 3D object geometry and appearance, tracks 6-DoF object mo-
+            tion, and synthesizes thousands of physically plausible, robot-agnostic demonstra-
+            tions through parallel-environment photorealistic rendering and inverse kinematics.
+            R2R2R uses 3D Gaussian Splatting (3DGS) to enable flexible asset generation
+            and trajectory synthesis for both rigid and articulated objects, converting these
+            representations to meshes to maintain compatibility with scalable rendering en-
+            gines. Data generated by R2R2R integrates directly with models that operate on
+            robot proprioceptive states and image observations, such as vision-language-action
+            models (VLA) and imitation learning policies. Physical experiments suggest that
+            models trained on R2R2R data alone can achieve comparable performance to those
+            trained on teleoperated demonstrations, with model performance scaling with the
+            amount and diversity of R2R2R data, while requiring <b>1/27</b> of the time to generate.
+            By decoupling data generation from physical robot constraints, R2R2R enables the
+            computational scaling of robot datasets to support increasingly capable generalist
+            policies.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Original Combined Carousel -->
+<div class="carousel-container" id="mainCarousel">
+  <!-- Iframe containers -->
+  <div id="iframe-container" class="iframe-container">
+    <iframe id="tiger" class="iframe" data-src="https://example.com/tiger"></iframe>
+    <iframe id="mug" class="iframe" data-src="https://example.com/mug"></iframe>
+    <!-- more iframes -->
+  </div>
+  
+  <!-- Video containers -->
+  <div class="video-carousel-wrapper">
+    <div class="carousel-item" id="tiger_video">
+      <video autoplay muted loop playsinline><source src="data/demo_vids/tiger_demo.mp4" type="video/mp4"></video>
+    </div>
+    <!-- more videos -->
+  </div>
+  
+  <!-- Thumbnails -->
+  <div class="results-slide-row" id="results-objs-scroll">
+    <div data-img-src="data/thumbnails/tiger.png" data-id="tiger-thumb" data-label="Tiger"></div>
+    <!-- more thumbnails -->
+  </div>
+  
+  <!-- Navigation -->
+  <button class="results-slide-arrow" id="results-slide-arrow-prev">&#8249;</button>
+  <button class="results-slide-arrow" id="results-slide-arrow-next">&#8250;</button>
+</div>
+
+<!-- Iframe-only Carousel -->
+<div class="carousel-container" id="iframeCarousel">
+  <!-- Iframe containers -->
+  <div id="iframe-only-container" class="iframe-container">
+    <iframe id="iframe1" class="iframe" data-src="https://example.com/iframe1"></iframe>
+    <iframe id="iframe2" class="iframe" data-src="https://example.com/iframe2"></iframe>
+    <iframe id="iframe3" class="iframe" data-src="https://example.com/iframe3"></iframe>
+  </div>
+  
+  <!-- Thumbnails -->
+  <div class="results-slide-row" id="iframe-objs-scroll">
+    <div data-img-src="data/thumbnails/iframe1.png" data-id="iframe1-thumb" data-label="Iframe 1"></div>
+    <div data-img-src="data/thumbnails/iframe2.png" data-id="iframe2-thumb" data-label="Iframe 2"></div>
+    <div data-img-src="data/thumbnails/iframe3.png" data-id="iframe3-thumb" data-label="Iframe 3"></div>
+  </div>
+  
+  <!-- Navigation -->
+  <button class="results-slide-arrow" id="iframe-slide-arrow-prev">&#8249;</button>
+  <button class="results-slide-arrow" id="iframe-slide-arrow-next">&#8250;</button>
+</div>
+
+<!-- Video-only Carousel 1 -->
+<div class="carousel-container" id="videoCarousel1">
+  <!-- Video display container -->
+  <div id="video-display-1" class="video-display-container"></div>
+  
+  <!-- Thumbnails -->
+  <div class="video-slide-row" id="video-objs-scroll-1">
+    <div data-video-src="data/demo_vids/vid1.mp4" data-id="vid1-thumb" data-label="Video 1"></div>
+    <div data-video-src="data/demo_vids/vid2.mp4" data-id="vid2-thumb" data-label="Video 2"></div>
+    <div data-video-src="data/demo_vids/vid3.mp4" data-id="vid3-thumb" data-label="Video 3"></div>
+  </div>
+  
+  <!-- Navigation -->
+  <button class="video-slide-arrow" id="video-slide-arrow-prev-1">&#8249;</button>
+  <button class="video-slide-arrow" id="video-slide-arrow-next-1">&#8250;</button>
+</div>
+
+<!-- Video-only Carousel 2 (with JS-defined videos) -->
+<div class="carousel-container" id="videoCarousel2">
+  <!-- Video display container -->
+  <div id="video-display-2" class="video-display-container"></div>
+  
+  <!-- Thumbnails (will be populated by JS) -->
+  <div class="video-slide-row" id="video-objs-scroll-2"></div>
+  
+  <!-- Navigation -->
+  <button class="video-slide-arrow" id="video-slide-arrow-prev-2">&#8249;</button>
+  <button class="video-slide-arrow" id="video-slide-arrow-next-2">&#8250;</button>
+</div>
+
+
+
+
+<div class="section base-row add-top-padding">
+  <h1 style="font-size: 1.5rem; font-weight: 600; text-align: center;">4D Part Reconstruction</h1>
+  <!-- TODO: ADJUST WORDING!!! -->
+  <p class="paragraph">
+      R2R2R takes in <b>1) </b>a multi-view object scan and <b>2)</b> a monocular demonstration video.
+      By creating part-aware 3D representations using <a href="https://www.garfield.studio/" class="author-text" target="_blank">GARField</a> (parts, toggle for clusters) and 
+      <a href="https://github.com/facebookresearch/dinov2" class="author-text"target="_blank">DINOv2</a> (tracking SE3 pose),
+      these smartphone-captured inputs can generate these 4D reconstructions:
+  </p>
+  
+  
+  <div id="objs">
+      <h1 class="tldr"><b>Input demonstration video</b></h1>
+  <div class="video-carousel-wrapper">
+      <div class="carousel-container" id="videoCarousel">
+
+          <div class="carousel-item" id="tiger_video">
+              <video autoplay muted loop playsinline height="400px">
+                  <source src="data/demo_vids/tiger_demo.mp4" type="video/mp4">
+              </video>
+          </div>
+          <div class="carousel-item" id="mug_video">
+              <video autoplay muted loop playsinline height="400px">
+                  <source src="data/demo_vids/mug_demo.mp4" type="video/mp4">
+              </video>
+          </div>
+          <div class="carousel-item" id="package_video">
+              <video autoplay muted loop playsinline height="400px">
+                  <source src="data/demo_vids/package_demo.mp4" type="video/mp4">
+              </video>
+          </div>
+          <div class="carousel-item" id="drawer_video">
+              <video autoplay muted loop playsinline height="400px">
+                  <source src="data/demo_vids/drawer_reversed_demo.mp4" type="video/mp4">
+              </video>
+          </div>
+          <div class="carousel-item" id="faucet_video">
+              <video autoplay muted loop playsinline height="400px">
+                  <source src="data/demo_vids/faucet_demo.mp4" type="video/mp4">
+              </video>
+          </div>
+      </div>
+  </div>
+  
+      <div id="iframe-container" class="iframe-container">
+          <div class="click-and-move-overlay">
+              <h1 class="tldr">
+                  <b>
+                      <img src="data/drag_icon.png" alt="" class="inline-image">
+                      Click and move me!
+                      <img src="data/drag_icon.png" alt="" class="inline-image">
+                  </b>
+              </h1>
+          </div>
+          <iframe
+              id="tiger"
+              class = "iframe"
+              data-src="https://real2render2real.github.io/viser-client/?playbackPath=https://real2render2real.github.io/recordings/tiger_traj.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+          ></iframe>
+          <iframe
+              id = "mug"
+              class = "iframe"
+              data-src="https://real2render2real.github.io/viser-client/?playbackPath=https://real2render2real.github.io/recordings/mug_traj.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+          ></iframe>
+          <iframe
+              id = "package"  
+              class = "iframe"
+              data-src="https://real2render2real.github.io/viser-client/?playbackPath=https://real2render2real.github.io/recordings/package_traj.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+          ></iframe>
+          <iframe
+              id = "drawer"  
+              class = "iframe"
+              data-src="https://real2render2real.github.io/viser-client/?playbackPath=https://real2render2real.github.io/recordings/drawer_traj.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+          ></iframe>
+          <iframe
+              id = "faucet"  
+              class = "iframe"
+              data-src="https://real2render2real.github.io/viser-client/?playbackPath=https://real2render2real.github.io/recordings/faucet_traj.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+          ></iframe>
+      </div>
+      <div style="position: relative; display: flex;">
+          <button class="results-slide-arrow" id="results-slide-arrow-prev" onclick="results_slide_left()">
+              &#8249;
+          </button>
+          <div class="results-slide-row" id="results-objs-scroll">
+              <div data-img-src="data/thumbnails/tiger.png" data-id="tiger-thumb" data-label="Tiger"></div>
+              <div data-img-src="data/thumbnails/mug.png" data-id="mug-thumb" data-label="Coffee Maker"></div>
+              <div data-img-src="data/thumbnails/package.png" data-id="package-thumb" data-label="Package"></div>
+              <div data-img-src="data/thumbnails/drawer.png" data-id="drawer-thumb" data-label="Drawer"></div>
+              <div data-img-src="data/thumbnails/faucet.png" data-id="faucet-thumb" data-label="Faucet"></div>
+          </div>
+          <button class="results-slide-arrow" id="results-slide-arrow-next" onclick="results_slide_right()">
+              &#8250;
+          </button>
+      </div>
+  </div> 
+  <p class="tldr"><b>Note:</b> For the drawer task, the human demonstration was collected by <i>closing</i> the drawer. The video was then replayed backwards as shown above.</p>
+</div>
+
+<div class="section base-row add-top-padding">
+  <h1 style="font-size: 1.5rem; font-weight: 600; text-align: center;">Trajectory Interpolation</h1>
+  <p class="paragraph">
+      Given a single human demonstration, R2R2R can synthesize a diverse set of physically plausible trajectories.
+  </p>
+  <img src="data/traj_interp.png" style="max-width: 100%; padding-bottom: 30px" />
+</div>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{real2render2real,
+  title     = {Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware},
+  author = {real2render2real@gmail.com}
+  year      = {2025},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://real2render2real.github.io" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            The website template is adapted from the <a class="author-text" href="https://www.nerfies.github.io/  ">Nerfies</a> project page.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

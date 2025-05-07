@@ -26,19 +26,21 @@
         rel="stylesheet">
 
   <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./media/pog.jpeg">
+  <link rel="icon" href="./data/favicon.png">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+  <script src="script.js" type="text/javascript"></script>
+  <script src="js/carousel_utils.js" type="text/javascript"></script>
+
+  <!-- Stylesheets; tabler icons, fonts, ...-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
@@ -48,13 +50,13 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware</h1>
-          <div class="is-size-5 publication-authors">
+          <h1 class="title is-1 publication-title" style="margin-bottom: 1.5rem;">Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware</h1>
+          <div class="is-size-5 publication-authors" style="margin-bottom: 0.5rem;">
             <span class="author-block">
               <a href="https://real2render2real.github.io">Anonymous</a>
             </span>
           </div>
-          <div class="is-size-5 publication-authors">
+          <div class="is-size-5 publication-authors" style="margin-bottom: 1rem;">
             <span class="author-block">
               Under Review CoRL 2025
             </span>
@@ -140,6 +142,17 @@
   </div>
 </section>
 
+<!-- TL;DR + Teaser video -->
+<div class="section base-row add-top-padding">
+  <h1 class="tldr">
+      <b>TL;DR</b>:
+      Robot See Robot Do uses a <b>4D</b> <b>D</b>ifferentiable <b>P</b>art <b>M</b>odel (4D-DPM) to visually imitate articulated motions from an object scan and single monocular video.
+  </h1>
+  <video id="main-video" autobuffer muted autoplay loop controls playsinline>
+      <source id="mp4" src="data/r2r2r_teaser.mp4" type="video/mp4">
+  </video>
+</div>
+
 
 <section class="section">
   <div class="container is-max-desktop">
@@ -177,462 +190,119 @@
   </div>
 </section>
 
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column">
-        <h2 class="title is-3">Results</h2>
-        <div class="base-row add-top-padding">
-          <style>
-              /* Base styles */
-              body {
-                  font-family: Arial, sans-serif;
-                  margin: 0;
-                  padding: 20px;
-                  box-sizing: border-box;
-              }
-              
-              * {
-                  box-sizing: border-box;
-              }
-
-              /* Container for vertical content */
-              .content-container {
-                  display: flex;
-                  flex-direction: column;
-                  width: 100%;
-                  max-width: 100%;
-                  align-items: center;
-                  box-sizing: border-box;
-                  padding: 0 15px;
-              }
-
-              /* Row for horizontal content */
-              .base-row {
-                  display: flex;
-                  flex-direction: row;
-                  width: 100%;
-                  justify-content: left;
-                  align-items: center;
-              }
-
-              /* Heading style */
-              .results-text {
-                  text-align: center;
-                  margin-bottom: 15px;
-              }
-
-              /* Iframe container */
-              /* .iframe-container {
-                  position: relative;
-                  width: 100%;
-                  max-width: 960px;
-                  height: 540px;
-                  margin: 0 auto;
-              } */
-
-              .iframe-container {
-                  position: relative;
-                  width: 100%;
-                  max-width: 1200px;
-                  height: 490px;
-                  margin: 30px auto;
-                  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-                  border-radius: 8px;
-                  overflow: hidden;
-                  transition: all 0.3s ease;
-              }
-
-              .iframe-container:hover {
-                  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-                  transform: translateY(-1px);
-              }
-
-              .iframe {
-                  position: absolute;
-                  top: 0;
-                  left: 0;
-                  width: 100%;
-                  height: 100%;
-                  border: none;
-                  display: none;
-              }
-
-              .iframe.show {
-                  display: block;
-              }
-
-              /* Fullscreen button container */
-              .fullscreen-container {
-                  text-align: right;
-                  margin: 10px auto;
-                  width: 100%;
-                  max-width: 960px;
-              }
-
-              .fullscreen-btn {
-                  background: none;
-                  border: 1px solid #ccc;
-                  cursor: pointer;
-                  padding: 5px 10px;
-                  border-radius: 4px;
-              }
-
-              /* Thumbnails */
-              .thumbnail-navigation {
-                  display: inline-block;
-                  margin-top: 15px;
-              }
-              .thumbnail-container {
-                  /* width: 100%; */
-                  /* max-width: 960px; */
-                  /* margin: 15px auto; */
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-                  justify-content: center;
-              }
-              .thumbnail-row {
-                  display: flex;
-                  overflow-x: auto;
-                  scroll-behavior: smooth;
-                  max-width: 800px;
-              }
-
-              .thumbnail-col {
-                  flex: 0 0 auto;
-                  margin: 0 5px;
-              }
-
-              .thumbnail-btn {
-                  background: none;
-                  border: 1px solid #ccc;
-                  padding: 5px;
-                  cursor: pointer;
-                  width: 220px;
-                  text-align: center;
-                  border-radius: 5px;
-              }
-
-              .thumbnail-btn.active-btn {
-                  border-color: #2196F3;
-                  background-color: #e6f3ff;
-              }
-
-              .thumbnails {
-                  width: 200px;
-                  height: 120px;
-                  object-fit: cover;
-                  margin-bottom: 5px;
-                  border-radius: 3px;
-              }
-
-              .slide-arrow {
-                  background: none;
-                  border: none;
-                  font-size: 24px;
-                  cursor: pointer;
-                  padding: 0 10px;
-              }
-          </style>
-        <div class="content-container">
-          <!-- Heading -->
-          <h3 class="results-text">
-              <b>Results are included below...</b>
-          </h3>
+<div class="section base-row add-top-padding">
+  <h1 style="font-size: 1.5rem; font-weight: 600; text-align: center;">4D Part Reconstruction</h1>
+  <!-- TODO: ADJUST WORDING!!! -->
+  <p class="paragraph">
+      R2R2R takes in <b>1) </b>a multi-view object scan and <b>2)</b> a monocular demonstration video.
+      By creating part-aware 3D representations using <a href="https://www.garfield.studio/" class="author-text" target="_blank">GARField</a> (parts, toggle for clusters) and 
+      <a href="https://github.com/facebookresearch/dinov2" class="author-text"target="_blank">DINOv2</a> (tracking SE3 pose),
+      these smartphone-captured inputs can generate these 4D reconstructions:
+  </p>
   
-          <!-- Iframe Container - This will hold all your iframes -->
-          <div id="iframe-container" class="iframe-container">
-          </div>
-      
-          <!-- Fullscreen button -->
-          <div class="fullscreen-container">
-              <button class="fullscreen-btn" onclick="toggleFullscreen()">
-                  Toggle Fullscreen
-              </button>
-          </div>
-      
-          <!-- Thumbnail Navigation -->
-          <div class="thumbnail-container" style="display: inline-block">
-              <!-- <button class="slide-arrow" id="slide-arrow-prev" onclick="slideLeft()">‹</button> -->
-              <div class="thumbnail-row" id="thumbnails-scroll">
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn active-btn" id="thumb-0" onclick="showIframe('drill_scene1')">
-                          <img src="./media/thumbnails/drill_scene1.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Drill #1 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-1" onclick="showIframe('drill_scene2')">
-                          <img src="./media/thumbnails/drill_scene2.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Drill #2 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-2" onclick="showIframe('drill_scene3')">
-                          <img src="./media/thumbnails/drill_scene3.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Drill #3 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-3" onclick="showIframe('drill_scene4')">
-                          <img src="./media/thumbnails/drill_scene4.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Drill #4 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-4" onclick="showIframe('iron_shelf_pick1')">
-                          <img src="./media/thumbnails/iron_shelf_pick1.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Iron Shelf Pick #1 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-5" onclick="showIframe('iron_shelf_place1')">
-                          <img src="./media/thumbnails/iron_shelf_place1.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Iron Shelf Place #1 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-6" onclick="showIframe('iron_shelf_pick2')">
-                          <img src="./media/thumbnails/iron_shelf_pick2.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Iron Shelf Pick #2 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-7" onclick="showIframe('iron_shelf_place2')">
-                          <img src="./media/thumbnails/iron_shelf_place2.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Iron Shelf Place #2 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-8" onclick="showIframe('shoe_shoebox_pick1')">
-                          <img src="./media/thumbnails/shoe_shoebox_pick1.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Shoe Shoebox Pick #1 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-9" onclick="showIframe('shoe_shoebox_place1')">
-                          <img src="./media/thumbnails/shoe_shoebox_place1.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Shoe Shoebox Place #1 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-10" onclick="showIframe('shoe_shoebox_pick2')">
-                        <img src="./media/thumbnails/shoe_shoebox_pick2.jpeg" alt="Item 1" class="thumbnails">
-                        <!-- <br> 
-                          Shoe Shoebox Pick #2 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-11" onclick="showIframe('shoe_shoebox_place2')">
-                          <img src="./media/thumbnails/shoe_shoebox_place2.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Shoe Shoebox Place #2 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-12" onclick="showIframe('jigsaw_shelf_pick1')">
-                        <img src="./media/thumbnails/jigsaw_shelf_pick1.jpeg" alt="Item 1" class="thumbnails">
-                        <!-- <br>
-                          Jigsaw Shelf Pick #1 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-13" onclick="showIframe('jigsaw_shelf_place1')">
-                        <img src="./media/thumbnails/jigsaw_shelf_place1.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br>
-                          Jigsaw Shelf Place #1 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-14" onclick="showIframe('jigsaw_shelf_pick2')">
-                          <img src="./media/thumbnails/jigsaw_shelf_pick2.jpeg" alt="Item 1" class="thumbnails">
-                          <!-- <br> 
-                          Jigsaw Shelf Pick #2 -->
-                      </button>
-                  </div>
-                  <div class="thumbnail-col">
-                      <button class="thumbnail-btn" id="thumb-15" onclick="showIframe('jigsaw_shelf_place2')">
-                        <img src="./media/thumbnails/jigsaw_shelf_place2.jpeg" alt="Item 1" class="thumbnails">
-                        <!-- <br> 
-                          Jigsaw Shelf Place #2 -->
-                      </button>
-                  </div>
+  
+  <div id="objs">
+      <h1 class="tldr"><b>Input demonstration video</b></h1>
+  <div class="video-carousel-wrapper">
+      <div class="carousel-container" id="videoCarousel">
 
-              </div>
-              <!-- <button class="slide-arrow" id="slide-arrow-next" onclick="slideRight()">›</button> -->
+          <div class="carousel-item" id="tiger_video">
+              <video autoplay muted loop playsinline height="400px">
+                  <source src="data/demo_vids/tiger_demo.mp4" type="video/mp4">
+              </video>
           </div>
-          <style>
-            /* Thumbnail navigation with proper alignment */
-            .thumbnail-navigation {
-                width: 100%;
-                max-width: 960px;
-                margin: 15px auto;
-            }
-            
-            .thumbnail-row-container {
-                width: 100%;
-                position: relative;
-                padding-bottom: 10px; /* Space for scrollbar */
-            }
-            
-            .thumbnail-row {
-                display: flex;
-                overflow-x: auto;
-                scroll-behavior: smooth;
-                width: 100%;
-                padding-left: 0; /* Ensure no left padding */
-                margin-left: 0; /* Ensure no left margin */
-                
-                /* Custom scrollbar styling */
-                scrollbar-width: thin; /* Firefox */
-                scrollbar-color: #2196F3 #f1f1f1; /* Firefox */
-            }
-            
-            /* Custom scrollbar for Chrome, Safari, and Opera */
-            .thumbnail-row::-webkit-scrollbar {
-                height: 8px;
-            }
-            
-            .thumbnail-row::-webkit-scrollbar-track {
-                background: #f1f1f1;
-                border-radius: 10px;
-            }
-            
-            .thumbnail-row::-webkit-scrollbar-thumb {
-                background: #2196F3;
-                border-radius: 10px;
-            }
-            
-            .thumbnail-row::-webkit-scrollbar-thumb:hover {
-                background: #0b7dda;
-            }
-            
-            .thumbnail-col {
-                flex: 0 0 auto;
-                margin: 0 5px;
-            }
-            
-            .thumbnail-col:first-child {
-                margin-left: 0; /* Remove left margin for first thumbnail */
-            }
-            
-            .thumbnail-btn {
-                background: none;
-                border: 1px solid #ccc;
-                padding: 5px;
-                cursor: pointer;
-                width: 220px;
-                text-align: center;
-                border-radius: 5px;
-            }
-            
-            .thumbnail-btn.active-btn {
-                border-color: #2196F3;
-                background-color: #e6f3ff;
-            }
-            
-            .thumbnails {
-                width: 200px;
-                height: 120px;
-                object-fit: cover;
-                margin-bottom: 5px;
-                border-radius: 3px;
-            }
-            </style>
-            
-            <script>
-            // Show specific iframe and update active thumbnail
-            function showIframe(iframeId) {
-                // Hide all iframes
-                document.querySelectorAll('.iframe').forEach(iframe => {
-                    iframe.classList.remove('show');
-                });
-                
-                // Show the selected iframe
-                const iframe = document.getElementById(iframeId);
-                if (iframe) {
-                    iframe.classList.add('show');
-                }
-                
-                // Update active thumbnail
-                const thumbnails = document.querySelectorAll('.thumbnail-btn');
-                thumbnails.forEach(thumb => {
-                    thumb.classList.remove('active-btn');
-                });
-                
-                // Find the thumbnail button associated with this iframe and scroll to it
-                for (let i = 0; i < thumbnails.length; i++) {
-                    if (thumbnails[i].onclick.toString().includes(iframeId)) {
-                        thumbnails[i].classList.add('active-btn');
-                        
-                        // Scroll the thumbnail into view (centered if possible)
-                        const thumbnailCol = thumbnails[i].closest('.thumbnail-col');
-                        if (thumbnailCol) {
-                            const container = document.getElementById('thumbnails-scroll');
-                            const scrollLeft = thumbnailCol.offsetLeft - (container.clientWidth / 2) + (thumbnailCol.clientWidth / 2);
-                            container.scrollTo({
-                                left: Math.max(0, scrollLeft),
-                                behavior: 'smooth'
-                            });
-                        }
-                        break;
-                    }
-                }
-              }
-      
-              // Scroll thumbnails left
-              function slideLeft() {
-                  document.getElementById('thumbnails-scroll').scrollBy({
-                      left: -300,
-                      behavior: 'smooth'
-                  });
-              }
-      
-              // Scroll thumbnails right
-              function slideRight() {
-                  document.getElementById('thumbnails-scroll').scrollBy({
-                      left: 300,
-                      behavior: 'smooth'
-                  });
-              }
-      
-              // Fullscreen toggle
-              function toggleFullscreen() {
-                  const container = document.getElementById('iframe-container');
-                  if (document.fullscreenElement) {
-                      document.exitFullscreen();
-                  } else {
-                      container.requestFullscreen().catch(err => {
-                          console.error(`Error attempting to enable fullscreen: ${err.message}`);
-                      });
-                  }
-              }
-          </script>
-        </div>
+          <div class="carousel-item" id="mug_video">
+              <video autoplay muted loop playsinline height="400px">
+                  <source src="data/demo_vids/mug_demo.mp4" type="video/mp4">
+              </video>
+          </div>
+          <div class="carousel-item" id="package_video">
+              <video autoplay muted loop playsinline height="400px">
+                  <source src="data/demo_vids/package_demo.mp4" type="video/mp4">
+              </video>
+          </div>
+          <div class="carousel-item" id="drawer_video">
+              <video autoplay muted loop playsinline height="400px">
+                  <source src="data/demo_vids/drawer_reversed_demo.mp4" type="video/mp4">
+              </video>
+          </div>
+          <div class="carousel-item" id="faucet_video">
+              <video autoplay muted loop playsinline height="400px">
+                  <source src="data/demo_vids/faucet_demo.mp4" type="video/mp4">
+              </video>
+          </div>
       </div>
-    </div>
   </div>
-</section>
+  
+      <div id="iframe-container" class="iframe-container">
+          <div class="click-and-move-overlay">
+              <h1 class="tldr">
+                  <b>
+                      <img src="data/drag_icon.png" alt="" class="inline-image">
+                      Click and move me!
+                      <img src="data/drag_icon.png" alt="" class="inline-image">
+                  </b>
+              </h1>
+          </div>
+          <iframe
+              id="tiger"
+              class = "iframe"
+              data-src="https://real2render2real.github.io/viser-client/?playbackPath=https://real2render2real.github.io/recordings/tiger_traj.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+          ></iframe>
+          <iframe
+              id = "mug"
+              class = "iframe"
+              data-src="https://real2render2real.github.io/viser-client/?playbackPath=https://real2render2real.github.io/recordings/mug_traj.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+          ></iframe>
+          <iframe
+              id = "package"  
+              class = "iframe"
+              data-src="https://real2render2real.github.io/viser-client/?playbackPath=https://real2render2real.github.io/recordings/package_traj.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+          ></iframe>
+          <iframe
+              id = "drawer"  
+              class = "iframe"
+              data-src="https://real2render2real.github.io/viser-client/?playbackPath=https://real2render2real.github.io/recordings/drawer_traj.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+          ></iframe>
+          <iframe
+              id = "faucet"  
+              class = "iframe"
+              data-src="https://real2render2real.github.io/viser-client/?playbackPath=https://real2render2real.github.io/recordings/faucet_traj.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+          ></iframe>
+      </div>
+      <div style="position: relative; display: flex;">
+          <button class="results-slide-arrow" id="results-slide-arrow-prev" onclick="results_slide_left()">
+              &#8249;
+          </button>
+          <div class="results-slide-row" id="results-objs-scroll">
+              <div data-img-src="data/thumbnails/tiger.png" data-id="tiger-thumb" data-label="Tiger"></div>
+              <div data-img-src="data/thumbnails/mug.png" data-id="mug-thumb" data-label="Coffee Maker"></div>
+              <div data-img-src="data/thumbnails/package.png" data-id="package-thumb" data-label="Package"></div>
+              <div data-img-src="data/thumbnails/drawer.png" data-id="drawer-thumb" data-label="Drawer"></div>
+              <div data-img-src="data/thumbnails/faucet.png" data-id="faucet-thumb" data-label="Faucet"></div>
+          </div>
+          <button class="results-slide-arrow" id="results-slide-arrow-next" onclick="results_slide_right()">
+              &#8250;
+          </button>
+      </div>
+  </div> 
+  <p class="tldr"><b>Note:</b> For the drawer task, the human demonstration was collected by <i>closing</i> the drawer. The video was then replayed backwards as shown above.</p>
+</div>
 
-
+<div class="section base-row add-top-padding">
+  <h1 style="font-size: 1.5rem; font-weight: 600; text-align: center;">Trajectory Interpolation</h1>
+  <p class="paragraph">
+      Given a single human demonstration, R2R2R can synthesize a diverse set of physically plausible trajectories.
+  </p>
+  <img src="data/traj_interp.png" style="max-width: 100%; padding-bottom: 30px" />
+</div>
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <pre><code>@article{real2render2real,
   title     = {Real2Render2Real: Scaling Robotic Manipulation Data Without Simulation or Robot Hardware},
+  author = {real2render2real@gmail.com}
   year      = {2025},
 }</code></pre>
   </div>
