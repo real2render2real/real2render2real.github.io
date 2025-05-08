@@ -143,15 +143,15 @@
 </section>
 
 <!-- TL;DR + Teaser video -->
-<div class="section base-row add-top-padding">
+<!-- <div class="section base-row add-top-padding">
   <h1 class="tldr">
       <b>TL;DR</b>:
-      Robot See Robot Do uses a <b>4D</b> <b>D</b>ifferentiable <b>P</b>art <b>M</b>odel (4D-DPM) to visually imitate articulated motions from an object scan and single monocular video.
+      Real2Render2Real uses a <b>4D</b> <b>D</b>ifferentiable <b>P</b>art <b>M</b>odel (4D-DPM) to visually imitate articulated motions from an object scan and single monocular video.
   </h1>
   <video id="main-video" autobuffer muted autoplay loop controls playsinline>
       <source id="mp4" src="data/r2r2r_teaser.mp4" type="video/mp4">
   </video>
-</div>
+</div> -->
 
 
 <section class="section">
@@ -192,7 +192,7 @@
 
 
 <div class="section base-row add-top-padding">
-  <h1 style="font-size: 1.5rem; font-weight: 600; text-align: center;">4D Part Reconstruction</h1>
+  <h1 style="font-size: 1.5rem; font-weight: 600; text-align: center;">4D Part Reconstruction and Robot Retargeting</h1>
   <!-- TODO: ADJUST WORDING!!! -->
   <p class="paragraph">
       R2R2R takes in <b>1) </b>a multi-view object scan and <b>2)</b> a monocular demonstration video.
@@ -237,11 +237,20 @@
       
         <!-- Iframe container -->
         <div id="iframe-container" class="iframe-container">
-          <iframe id="tiger" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
-          <iframe id="mug" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
-          <iframe id="package" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
-          <iframe id="drawer" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
-          <iframe id="faucet" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
+            <div class="click-and-move-overlay">
+              <h1 class="tldr">
+                  <b>
+                      <img src="data/drag_icon.png" alt="" class="inline-image">
+                      Click and move me!
+                      <img src="data/drag_icon.png" alt="" class="inline-image">
+                  </b>
+              </h1>
+          </div>
+          <iframe id="tiger" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/tiger_pick_r2r2r_recording_20250507_112639.viser&initialCameraPosition=1.027,0.445,0.681&initialCameraLookAt=0.188,-0.113,-0.129&initialCameraUp=-0.000,-0.000,1.000"></iframe>
+          <iframe id="mug" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.009,0.430,0.637&initialCameraLookAt=0.240,-0.160,-0.081&initialCameraUp=-0.000,-0.000,1.000"></iframe>
+          <iframe id="package" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>  
+          <iframe id="drawer" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/drawer_recording_20250507_104056.viser&initialCameraPosition=1.050,0.428,0.700&initialCameraLookAt=0.000,0.000,-0.100&initialCameraUp=-0.000,-0.000,1.000"></iframe>
+          <iframe id="faucet" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/faucet_recording_20250507_110111.viser&initialCameraPosition=1.026,0.455,0.651&initialCameraLookAt=0.108,-0.143,-0.040&initialCameraUp=-0.000,-0.000,1.000"></iframe>
         </div>
         
         <!-- Thumbnails -->
@@ -266,38 +275,90 @@
       Given a single human demonstration, R2R2R can synthesize a diverse set of physically plausible trajectories.
   </p>
   <img src="data/traj_interp.png" style="max-width: 100%; padding-bottom: 30px" />
+
+  <div id="iframe-container" class="iframe-container">
+      <div class="click-and-move-overlay">
+          <h1 class="tldr">
+              <b>
+                  <img src="data/drag_icon.png" alt="" class="inline-image">
+                  Click and move me!
+                  <img src="data/drag_icon.png" alt="" class="inline-image">
+              </b>
+          </h1>
+      </div>
+      <iframe class="iframe show"
+          src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/traj_interp.viser&initialCameraPosition=-0.093,-0.795,0.870&initialCameraLookAt=-0.338,-0.272,-0.111&initialCameraUp=-0.000,-0.000,1.000"
+      ></iframe>
+  </div>
 </div>
 
 
 
 
-<div class="section base-row add-top-padding">
-  <h1 style="font-size: 1.5rem; font-weight: 600; text-align: center;">Robot Retargeting</h1>
-  <!-- Iframe-only Carousel Example -->
+<!-- <div class="section base-row add-top-padding">
+  <h1 style="font-size: 1.5rem; font-weight: 600; text-align: center;">Robot Agnostic</h1>
   <div class="carousel-container" id="iframeCarousel">
-    <!-- Iframe container -->
     <div id="iframe-only-container" class="iframe-container">
-      <iframe id="tiger" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
-      <iframe id="mug" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
-      <iframe id="mug-franka" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
-      <iframe id="package" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>  
-      <iframe id="drawer" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
-      <iframe id="faucet" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.050,0.428,0.670&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
+      <iframe id="mug" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.009,0.430,0.637&initialCameraLookAt=0.240,-0.160,-0.081&initialCameraUp=-0.000,-0.000,1.000"></iframe>
+      <iframe id="mug-franka" class="iframe" data-src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/franka_coffee_maker_recording_20250506_210619.viser&initialCameraPosition=0.991,-0.089,0.591&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"></iframe>
     </div>
     
-    <!-- Thumbnails -->
     <div class="results-slide-row" id="iframe-objs-scroll">
-      <div data-img-src="data/thumbnails/tiger.png" data-id="tiger-thumb" data-label="Tiger"></div>
-      <div data-img-src="data/thumbnails/mug.png" data-id="mug-thumb" data-label="Coffee Maker (YuMi)"></div>
-      <div data-img-src="data/thumbnails/mug.png" data-id="mug-franka-thumb" data-label="Coffee Maker (Franka)"></div>
-      <div data-img-src="data/thumbnails/package.png" data-id="package-thumb" data-label="Package"></div>
-      <div data-img-src="data/thumbnails/drawer.png" data-id="drawer-thumb" data-label="Drawer"></div>
-      <div data-img-src="data/thumbnails/faucet.png" data-id="faucet-thumb" data-label="Faucet"></div>
+      <div data-img-src="data/thumbnails/mug.png" data-id="mug-thumb" data-label="YuMi IRB 14000"></div>
+      <div data-img-src="data/thumbnails/mug.png" data-id="mug-franka-thumb" data-label="Franka Panda"></div>
     </div>
     
-    <!-- Navigation -->
     <button class="results-slide-arrow" id="iframe-slide-arrow-prev">&#8249;</button>
     <button class="results-slide-arrow" id="iframe-slide-arrow-next">&#8250;</button>
+  </div>
+</div> -->
+
+
+<div class="section base-row add-top-padding">
+  <h1 style="font-size: 1.5rem; font-weight: 600; text-align: center;">Robot Agnostic</h1>
+  <div class="iframe-row">
+    <div class="iframe-column">
+    <div id="iframe-container-1" class="iframe-container">
+      <div class="click-and-move-overlay">
+        <h1 class="tldr">
+          <b>
+            <img src="data/drag_icon.png" alt="" class="inline-image">
+            Click and move me!
+            <img src="data/drag_icon.png" alt="" class="inline-image">
+          </b>
+        </h1>
+      </div>
+      <iframe
+        id="remote_merge_1"
+        class="iframe show"
+        src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/coffee_maker_recording_20250506_191701.viser&initialCameraPosition=1.009,0.430,0.637&initialCameraLookAt=0.240,-0.160,-0.081&initialCameraUp=-0.000,-0.000,1.000"
+      ></iframe>
+    </div>
+    <div class="iframe-caption">
+      <h3 style="text-align: center;">YuMi IRB 14000</h3>
+    </div>
+  </div>
+  
+  <div class="iframe-column">
+    <div id="iframe-container-2" class="iframe-container">
+      <div class="click-and-move-overlay">
+        <h1 class="tldr">
+          <b>
+            <img src="data/drag_icon.png" alt="" class="inline-image">
+            Click and move me!
+            <img src="data/drag_icon.png" alt="" class="inline-image">
+          </b>
+        </h1>
+      </div>
+      <iframe
+        id="remote_right"
+        class="iframe show"
+        src="https://uynitsuj.github.io/viser-client/?playbackPath=https://uynitsuj.github.io/recordings/franka_coffee_maker_recording_20250506_210619.viser&initialCameraPosition=0.991,-0.089,0.591&initialCameraLookAt=0.000,0.000,0.000&initialCameraUp=-0.000,-0.000,1.000"
+      ></iframe>
+    </div>
+    <div class="iframe-caption">
+      <h3 style="text-align: center;">Franka Panda</h3>
+    </div>
   </div>
 </div>
 
@@ -315,11 +376,9 @@
       <div data-video-src="data/randomization/franka_rand_range.mp4" data-id="franka-video-thumb" data-img-src="data/thumbnails/mug.png" data-label="Coffee Maker (Franka)"></div>
       <div data-video-src="data/randomization/package_rand_range.mp4" data-id="package-video-thumb" data-img-src="data/thumbnails/package.png" data-label="Package"></div>
       <div data-video-src="data/randomization/drawer_rand_range.mp4" data-id="drawer-video-thumb" data-img-src="data/thumbnails/drawer.png" data-label="Drawer"></div>
-      <div data-video-src="/home/lifelong/websites/real2render2real.github.io/data/randomization/faucet_rand_range.mp4" data-id="faucet-video-thumb" data-img-src="data/thumbnails/faucet.png" data-label="Faucet"></div>
+      <div data-video-src="data/randomization/faucet_rand_range.mp4" data-id="faucet-video-thumb" data-img-src="data/thumbnails/faucet.png" data-label="Faucet"></div>
     </div>
 
-    
-    
     <!-- Navigation -->
     <button class="video-slide-arrow" id="video-slide-arrow-prev-1">&#8249;</button>
     <button class="video-slide-arrow" id="video-slide-arrow-next-1">&#8250;</button>

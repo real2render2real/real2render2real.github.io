@@ -1398,10 +1398,12 @@ body {
   white-space: nowrap;
 }
 
-/* Center video display and ensure proper sizing */
+/* Add these styles to your existing CSS or modify the existing ones */
+
+/* Increase video display container size */
 .video-display-container {
   width: 100%;
-  max-width: 800px; /* Limit max width */
+  max-width: 940px; /* Increased from 800px to use more of the available space */
   margin: 0 auto 20px auto;
   display: flex;
   justify-content: center;
@@ -1409,22 +1411,125 @@ body {
   height: auto;
 }
 
-.video-item {
-  display: none;
-  width: 100%;
-  text-align: center;
-}
-
-.video-item.show {
-  display: block;
-}
-
+/* Make video items take up more space */
 .video-item video {
   width: 100%;
-  max-height: 450px;
+  max-height: 600px; /* Increased from 450px for taller videos */
   object-fit: contain; /* This ensures the video maintains its aspect ratio */
   border-radius: 10px;
   margin: 0 auto;
   display: block;
   background-color: #000; /* Optional: adds a black background for videos with transparent parts */
+}
+
+/* Ensure carousel container uses more of the available width */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 940px;
+  margin: 20px auto;
+  padding: 0 20px; /* Reduced padding to give more space to the video */
+}
+
+/* On larger screens, make the videos even bigger */
+@media (min-width: 1200px) {
+  .video-display-container {
+    max-width: 1100px;
+  }
+  
+  .video-item video {
+    max-height: 900px;
+  }
+  
+  .carousel-container {
+    max-width: 1100px;
+  }
+}
+
+/* For smaller screens, adjust the height proportionally */
+@media (max-width: 768px) {
+  .video-item video {
+    max-height: 450px;
+  }
+}
+
+@media (max-width: 576px) {
+  .video-item video {
+    max-height: 350px;
+  }
+}
+
+/* Container for side-by-side iframes */
+.iframe-side-by-side-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px; /* Space between the iframes */
+}
+
+/* Adjust iframe containers when side-by-side */
+.iframe-container.side-by-side {
+  width: 48%; /* Slightly less than 50% to account for gap */
+  height: 400px; /* Increase height from 600px to 800px */
+  margin: 10px 0;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .iframe-side-by-side-container {
+    flex-direction: column;
+  }
+  
+  .iframe-container.side-by-side {
+    width: 97%;
+    height: 600px; /* Keep the mobile height a bit smaller */
+    margin: 10px auto;
+  }
+}
+
+/* Make iframe itself take more space in the container */
+.iframe-container.side-by-side .iframe {
+  width: 100%;
+  height: 100%;
+}
+
+
+.iframe-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+.iframe-column {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Caption styles */
+.iframe-caption {
+  padding: 10px 5px;
+  margin-top: 5px;
+}
+
+.iframe-caption h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-family: 'Varela Round', sans-serif;
+  color: #4d4d4d;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.iframe-caption p {
+  margin-top: 0;
+  font-family: 'Open Sans', sans-serif;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.5;
 }
