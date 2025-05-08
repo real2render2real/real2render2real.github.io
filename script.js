@@ -361,6 +361,345 @@ class VideoCarousel extends BaseCarousel {
   }
 }
 
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Helper function to check if element is in viewport
+  function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  }
+  
+  // Helper function to limit concurrent video playback
+  function manageVideoPlayback() {
+    const maxConcurrentVideos = 4; // Maximum number of videos playing at once
+    let playingVideos = 0;
+    
+    videoCards.forEach(card => {
+      const video = card.querySelector('video');
+      const wrapper = card.querySelector('.video-wrapper');
+      
+      // Check if video is in viewport
+      if (isElementInViewport(card)) {
+        card.classList.remove('out-of-view');
+        
+        // If we haven't reached max concurrent videos, play this one
+        if (playingVideos < maxConcurrentVideos) {
+          if (video.paused) {
+            video.play().then(() => {
+              card.classList.add('is-playing');
+              wrapper.classList.add('video-playing');
+              playingVideos++;
+            }).catch(e => {
+              console.warn('Could not play video:', e);
+            });
+          } else {
+            // Already playing
+            playingVideos++;
+          }
+        }
+      } else {
+        // Video is out of viewport
+        card.classList.add('out-of-view');
+        if (!video.paused) {
+          video.pause();
+          card.classList.remove('is-playing');
+          wrapper.classList.remove('video-playing');
+        }
+      }
+    });
+  }
+  // Get carousel elements
+  const videoGrid = document.getElementById('video-grid');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const videoCards = document.querySelectorAll('.video-card');
+  
+  // Get fullscreen elements
+  const fullscreenOverlay = document.getElementById('fullscreen-overlay');
+  const fullscreenVideo = document.getElementById('fullscreen-video');
+  const closeFullscreen = document.getElementById('close-fullscreen');
+  
+  // Calculate number of videos visible based on container width
+  function getVisibleVideos() {
+    // Get container width
+    const containerWidth = videoGrid.parentElement.clientWidth - 100; // Subtract padding for arrows
+    
+    // Get width of first video card including margin
+    const cardWidth = videoCards[0].offsetWidth + 20; // 20px is the gap between cards
+    
+    // Calculate how many videos fit in the container
+    return Math.floor(containerWidth / cardWidth);
+  }
+  
+  // Scroll the carousel by a number of videos
+  function scrollCarousel(direction) {
+    // Get width of first video card including margin
+    const cardWidth = videoCards[0].offsetWidth + 20; // 20px is the gap between cards
+    
+    // Calculate how many videos to scroll (default to visible videos count)
+    const scrollAmount = cardWidth * getVisibleVideos();
+    
+    // Scroll the container
+    if (direction === 'next') {
+      videoGrid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    } else {
+      videoGrid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    }
+  }
+  
+  // Initialize videos to play automatically
+  function initVideoBehavior() {
+    videoCards.forEach(card => {
+      const video = card.querySelector('video');
+      
+      // Add controls attribute
+      video.controls = true;
+      
+      // Set autoplay, loop, and muted attributes to enable autoplay
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = true; // Muted is required for autoplay in most browsers
+      
+      // Ensure videos start playing
+      video.play().catch(error => {
+        console.warn('Autoplay was prevented:', error);
+        // Most browsers require user interaction before autoplay
+        // We'll try again when they scroll or interact
+      });
+      
+      // Open video in fullscreen overlay on click
+      card.addEventListener('click', (e) => {
+        // Don't trigger if clicking on controls
+        if (e.target === video && e.target !== e.currentTarget) return;
+        
+        // Set the source of the fullscreen video
+        fullscreenVideo.src = video.src;
+        
+        // Show the overlay
+        fullscreenOverlay.classList.add('active');
+        
+        // Play the fullscreen video unmuted
+        fullscreenVideo.muted = false;
+        fullscreenVideo.play();
+      });
+    });
+    
+    // Try to play videos when they become visible during scrolling
+    document.addEventListener('scroll', () => {
+      videoCards.forEach(card => {
+        const video = card.querySelector('video');
+        const rect = card.getBoundingClientRect();
+        const isVisible = 
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= window.innerHeight &&
+          rect.right <= window.innerWidth;
+          
+        if (isVisible && video.paused) {
+          video.play().catch(e => console.warn('Play prevented during scroll:', e));
+        }
+      });
+    }, { passive: true });
+  }
+  
+  // Close fullscreen video
+  if (closeFullscreen) {
+    closeFullscreen.addEventListener('click', () => {
+      // Pause the video
+      fullscreenVideo.pause();
+      
+      // Hide the overlay
+      fullscreenOverlay.classList.remove('active');
+      
+      // Reset the source after a short delay
+      setTimeout(() => {
+        fullscreenVideo.src = '';
+      }, 300);
+    });
+  }
+  
+  // Add click events to navigation buttons
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      scrollCarousel('prev');
+    });
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      scrollCarousel('next');
+    });
+  }
+  
+  // Initialize keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    // Only handle arrow keys if the carousel is visible in the viewport
+    const rect = videoGrid.getBoundingClientRect();
+    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    
+    if (!isVisible) return;
+    
+    // Handle arrow keys
+    if (e.key === 'ArrowLeft') {
+      scrollCarousel('prev');
+    } else if (e.key === 'ArrowRight') {
+      scrollCarousel('next');
+    }
+    
+    // Handle ESC key for fullscreen overlay
+    if (e.key === 'Escape' && fullscreenOverlay.classList.contains('active')) {
+      closeFullscreen.click();
+    }
+  });
+  
+  // Handle window resize to adjust navigation
+  window.addEventListener('resize', () => {
+    // Calculate visible videos again on resize
+    // This ensures scrolling behavior stays consistent
+    getVisibleVideos();
+  });
+  
+  // Initialize the carousel
+  initVideoBehavior();
+  
+  // Manage video playback on load
+  manageVideoPlayback();
+  
+  // Update video playback on scroll
+  window.addEventListener('scroll', function() {
+    manageVideoPlayback();
+  }, { passive: true });
+  
+  // Update video playback after carousel navigation
+  prevBtn.addEventListener('click', function() {
+    setTimeout(manageVideoPlayback, 500); // Wait for scrolling to finish
+  });
+  
+  nextBtn.addEventListener('click', function() {
+    setTimeout(manageVideoPlayback, 500); // Wait for scrolling to finish
+  });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Select all video elements and their containers
+  const videoCards = document.querySelectorAll('.video-card');
+  const fullscreenOverlay = document.getElementById('fullscreen-overlay');
+  const fullscreenVideo = document.getElementById('fullscreen-video');
+  const closeFullscreen = document.getElementById('close-fullscreen');
+  
+  // Helper function to check if element is in viewport
+  function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.bottom > 0 &&
+      rect.left < (window.innerWidth || document.documentElement.clientWidth) &&
+      rect.right > 0
+    );
+  }
+  
+  // Function to manage video playback based on visibility
+  function manageVideoPlayback() {
+    videoCards.forEach(card => {
+      const video = card.querySelector('video');
+      const wrapper = card.querySelector('.video-wrapper');
+      
+      // Check if the video card is in the viewport
+      if (isElementInViewport(card)) {
+        // Video is visible in viewport
+        if (video.paused) {
+          // Try to play the video
+          video.play().then(() => {
+            card.classList.add('is-playing');
+            wrapper.classList.add('video-playing');
+          }).catch(e => {
+            console.warn('Could not play video:', e);
+          });
+        }
+      } else {
+        // Video is not in viewport, pause it to save resources
+        if (!video.paused) {
+          video.pause();
+          card.classList.remove('is-playing');
+          wrapper.classList.remove('video-playing');
+        }
+      }
+    });
+  }
+  
+  // Setup click to open fullscreen overlay
+  videoCards.forEach(card => {
+    const video = card.querySelector('video');
+    
+    // Handle click to open fullscreen
+    card.addEventListener('click', function(e) {
+      // Don't trigger fullscreen if clicking on video controls
+      if (e.target === video) return;
+      
+      // Pause all playing videos
+      videoCards.forEach(c => {
+        const v = c.querySelector('video');
+        if (!v.paused) v.pause();
+      });
+      
+      // Set the source of the fullscreen video
+      fullscreenVideo.src = video.src;
+      
+      // Show the overlay
+      fullscreenOverlay.classList.add('active');
+      
+      // Play the fullscreen video (unmuted)
+      fullscreenVideo.muted = false;
+      fullscreenVideo.play().catch(e => console.warn('Fullscreen play error:', e));
+    });
+  });
+  
+  // Handle close fullscreen button
+  if (closeFullscreen) {
+    closeFullscreen.addEventListener('click', function() {
+      // Pause the fullscreen video
+      fullscreenVideo.pause();
+      
+      // Hide the overlay
+      fullscreenOverlay.classList.remove('active');
+      
+      // Reset the source after a short delay
+      setTimeout(() => {
+        fullscreenVideo.src = '';
+      }, 300);
+      
+      // Resume playing videos in the viewport
+      manageVideoPlayback();
+    });
+  }
+  
+  // Handle ESC key to close fullscreen
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && fullscreenOverlay.classList.contains('active')) {
+      closeFullscreen.click();
+    }
+  });
+  
+  // Initial video playback management
+  manageVideoPlayback();
+  
+  // Update video playback on scroll
+  window.addEventListener('scroll', function() {
+    manageVideoPlayback();
+  }, { passive: true });
+  
+  // Update on resize (in case viewport dimensions change)
+  window.addEventListener('resize', function() {
+    manageVideoPlayback();
+  }, { passive: true });
+});
+
 // Initialize when document is ready
 $(document).ready(function() {
   // Combined carousel (original)
