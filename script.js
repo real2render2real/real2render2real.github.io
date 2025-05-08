@@ -363,226 +363,77 @@ class VideoCarousel extends BaseCarousel {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Helper function to check if element is in viewport
-  function isElementInViewport(el) {
-    const rect = el.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-  }
-  
-  // Helper function to limit concurrent video playback
-  function manageVideoPlayback() {
-    const maxConcurrentVideos = 4; // Maximum number of videos playing at once
-    let playingVideos = 0;
-    
-    videoCards.forEach(card => {
-      const video = card.querySelector('video');
-      const wrapper = card.querySelector('.video-wrapper');
-      
-      // Check if video is in viewport
-      if (isElementInViewport(card)) {
-        card.classList.remove('out-of-view');
-        
-        // If we haven't reached max concurrent videos, play this one
-        if (playingVideos < maxConcurrentVideos) {
-          if (video.paused) {
-            video.play().then(() => {
-              card.classList.add('is-playing');
-              wrapper.classList.add('video-playing');
-              playingVideos++;
-            }).catch(e => {
-              console.warn('Could not play video:', e);
-            });
-          } else {
-            // Already playing
-            playingVideos++;
-          }
-        }
-      } else {
-        // Video is out of viewport
-        card.classList.add('out-of-view');
-        if (!video.paused) {
-          video.pause();
-          card.classList.remove('is-playing');
-          wrapper.classList.remove('video-playing');
-        }
-      }
-    });
-  }
-  // Get carousel elements
   const videoGrid = document.getElementById('video-grid');
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
-  const videoCards = document.querySelectorAll('.video-card');
   
-  // Get fullscreen elements
-  const fullscreenOverlay = document.getElementById('fullscreen-overlay');
-  const fullscreenVideo = document.getElementById('fullscreen-video');
-  const closeFullscreen = document.getElementById('close-fullscreen');
+  // Calculate scroll amount (width of one video card + gap)
+  const scrollAmount = 380; // 360px card width + 20px gap
   
-  // Calculate number of videos visible based on container width
-  function getVisibleVideos() {
-    // Get container width
-    const containerWidth = videoGrid.parentElement.clientWidth - 100; // Subtract padding for arrows
-    
-    // Get width of first video card including margin
-    const cardWidth = videoCards[0].offsetWidth + 20; // 20px is the gap between cards
-    
-    // Calculate how many videos fit in the container
-    return Math.floor(containerWidth / cardWidth);
-  }
+  // Previous button click handler
+  prevBtn.addEventListener('click', () => {
+    videoGrid.scrollBy({
+      left: -scrollAmount,
+      behavior: 'smooth'
+    });
+  });
   
-  // Scroll the carousel by a number of videos
-  function scrollCarousel(direction) {
-    // Get width of first video card including margin
-    const cardWidth = videoCards[0].offsetWidth + 20; // 20px is the gap between cards
-    
-    // Calculate how many videos to scroll (default to visible videos count)
-    const scrollAmount = cardWidth * getVisibleVideos();
-    
-    // Scroll the container
-    if (direction === 'next') {
-      videoGrid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    } else {
-      videoGrid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-    }
-  }
+  // Next button click handler
+  nextBtn.addEventListener('click', () => {
+    videoGrid.scrollBy({
+      left: scrollAmount,
+      behavior: 'smooth'
+    });
+  });
   
-  // Initialize videos to play automatically
-  function initVideoBehavior() {
-    videoCards.forEach(card => {
-      const video = card.querySelector('video');
-      
-      // Add controls attribute
-      video.controls = true;
-      
-      // Set autoplay, loop, and muted attributes to enable autoplay
-      video.autoplay = true;
+  // Update arrow visibility based on scroll position
+  videoGrid.addEventListener('scroll', () => {
+    prevBtn.style.opacity = videoGrid.scrollLeft > 0 ? '1' : '0.5';
+    nextBtn.style.opacity = 
+      videoGrid.scrollLeft < (videoGrid.scrollWidth - videoGrid.clientWidth) ? '1' : '0.5';
+  });
+  
+  // Initialize arrow visibility
+  prevBtn.style.opacity = '0.5';
+  
+  // Function to ensure videos loop
+  function setupVideoLooping() {
+    const videos = document.querySelectorAll('.video-card video');
+    videos.forEach(video => {
+      // Ensure loop attribute is set
       video.loop = true;
-      video.muted = true; // Muted is required for autoplay in most browsers
       
-      // Ensure videos start playing
-      video.play().catch(error => {
-        console.warn('Autoplay was prevented:', error);
-        // Most browsers require user interaction before autoplay
-        // We'll try again when they scroll or interact
-      });
-      
-      // Open video in fullscreen overlay on click
-      card.addEventListener('click', (e) => {
-        // Don't trigger if clicking on controls
-        if (e.target === video && e.target !== e.currentTarget) return;
-        
-        // Set the source of the fullscreen video
-        fullscreenVideo.src = video.src;
-        
-        // Show the overlay
-        fullscreenOverlay.classList.add('active');
-        
-        // Play the fullscreen video unmuted
-        fullscreenVideo.muted = false;
-        fullscreenVideo.play();
+      // Add ended event listener to restart video
+      video.addEventListener('ended', () => {
+        video.currentTime = 0;
+        video.play().catch(e => console.log("Video play error:", e));
       });
     });
-    
-    // Try to play videos when they become visible during scrolling
-    document.addEventListener('scroll', () => {
-      videoCards.forEach(card => {
-        const video = card.querySelector('video');
-        const rect = card.getBoundingClientRect();
-        const isVisible = 
-          rect.top >= 0 &&
-          rect.left >= 0 &&
-          rect.bottom <= window.innerHeight &&
-          rect.right <= window.innerWidth;
-          
-        if (isVisible && video.paused) {
-          video.play().catch(e => console.warn('Play prevented during scroll:', e));
-        }
-      });
-    }, { passive: true });
   }
   
-  // Close fullscreen video
-  if (closeFullscreen) {
-    closeFullscreen.addEventListener('click', () => {
-      // Pause the video
-      fullscreenVideo.pause();
+  // Simple function to play visible videos
+  function playVisibleVideos() {
+    const videos = document.querySelectorAll('.video-card video');
+    videos.forEach(video => {
+      const rect = video.getBoundingClientRect();
+      const isVisible = rect.left >= 0 && rect.right <= window.innerWidth;
       
-      // Hide the overlay
-      fullscreenOverlay.classList.remove('active');
-      
-      // Reset the source after a short delay
-      setTimeout(() => {
-        fullscreenVideo.src = '';
-      }, 300);
+      if (isVisible) {
+        video.play().catch(e => console.log("Video play error:", e));
+      } else {
+        video.pause();
+      }
     });
   }
   
-  // Add click events to navigation buttons
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      scrollCarousel('prev');
-    });
-  }
+  // Setup video looping
+  setupVideoLooping();
   
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      scrollCarousel('next');
-    });
-  }
+  // Play visible videos on scroll
+  videoGrid.addEventListener('scroll', playVisibleVideos);
   
-  // Initialize keyboard navigation
-  document.addEventListener('keydown', (e) => {
-    // Only handle arrow keys if the carousel is visible in the viewport
-    const rect = videoGrid.getBoundingClientRect();
-    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-    
-    if (!isVisible) return;
-    
-    // Handle arrow keys
-    if (e.key === 'ArrowLeft') {
-      scrollCarousel('prev');
-    } else if (e.key === 'ArrowRight') {
-      scrollCarousel('next');
-    }
-    
-    // Handle ESC key for fullscreen overlay
-    if (e.key === 'Escape' && fullscreenOverlay.classList.contains('active')) {
-      closeFullscreen.click();
-    }
-  });
-  
-  // Handle window resize to adjust navigation
-  window.addEventListener('resize', () => {
-    // Calculate visible videos again on resize
-    // This ensures scrolling behavior stays consistent
-    getVisibleVideos();
-  });
-  
-  // Initialize the carousel
-  initVideoBehavior();
-  
-  // Manage video playback on load
-  manageVideoPlayback();
-  
-  // Update video playback on scroll
-  window.addEventListener('scroll', function() {
-    manageVideoPlayback();
-  }, { passive: true });
-  
-  // Update video playback after carousel navigation
-  prevBtn.addEventListener('click', function() {
-    setTimeout(manageVideoPlayback, 500); // Wait for scrolling to finish
-  });
-  
-  nextBtn.addEventListener('click', function() {
-    setTimeout(manageVideoPlayback, 500); // Wait for scrolling to finish
-  });
+  // Initial play of visible videos
+  playVisibleVideos();
 });
 
 
