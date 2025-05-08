@@ -553,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize when document is ready
 $(document).ready(function() {
-  // Combined carousel (original)
+  // Combined carousel
   const combinedCarousel = new CombinedCarousel({
     containerId: 'mainCarousel',
     slideRowId: 'results-objs-scroll',
@@ -572,7 +572,6 @@ $(document).ready(function() {
     iframeIds: ['tiger', 'mug', 'package'] // Your iframe IDs
   });
   
-  // Video-only carousel 1 (DOM-based)
   const videoCarousel1 = new VideoCarousel({
     containerId: 'videoCarousel1',
     slideRowId: 'video-objs-scroll-1',
@@ -580,30 +579,12 @@ $(document).ready(function() {
     prevBtnId: 'video-slide-arrow-prev-1',
     nextBtnId: 'video-slide-arrow-next-1'
   });
-  
-  // // Video-only carousel 2 (using video list approach)
-  // const videoCarousel2 = new VideoCarousel({
-  //   containerId: 'videoCarousel2',
-  //   slideRowId: 'video-objs-scroll-2',
-  //   videoContainerId: 'video-display-2',
-  //   prevBtnId: 'video-slide-arrow-prev-2',
-  //   nextBtnId: 'video-slide-arrow-next-2',
-  //   videos: [
-  //     { 
-  //       src: 'data/demo_vids/tiger_demo.mp4', 
-  //       label: 'Tiger',
-  //       imgSrc: 'data/thumbnails/tiger.png'
-  //     },
-  //     { 
-  //       src: 'data/demo_vids/mug_demo.mp4', 
-  //       label: 'Coffee Maker',
-  //       imgSrc: 'data/thumbnails/mug.png'
-  //     },
-  //     { 
-  //       src: 'data/demo_vids/package_demo.mp4', 
-  //       label: 'Package',
-  //       imgSrc: 'data/thumbnails/package.png'
-  //     }
-  //   ]
-  // });
+
+  const videoCarousel2 = new VideoCarousel({
+    containerId: 'videoCarousel2',
+    slideRowId: 'video-objs-scroll-2',
+    videoContainerId: 'video-display-2',
+    prevBtnId: 'video-slide-arrow-prev-2',
+    nextBtnId: 'video-slide-arrow-next-2'
+  });
 });
