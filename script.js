@@ -391,29 +391,29 @@ $(document).ready(function() {
     nextBtnId: 'video-slide-arrow-next-1'
   });
   
-  // Video-only carousel 2 (using video list approach)
-  const videoCarousel2 = new VideoCarousel({
-    containerId: 'videoCarousel2',
-    slideRowId: 'video-objs-scroll-2',
-    videoContainerId: 'video-display-2',
-    prevBtnId: 'video-slide-arrow-prev-2',
-    nextBtnId: 'video-slide-arrow-next-2',
-    videos: [
-      { 
-        src: 'data/demo_vids/tiger_demo.mp4', 
-        label: 'Tiger',
-        imgSrc: 'data/thumbnails/tiger.png'
-      },
-      { 
-        src: 'data/demo_vids/mug_demo.mp4', 
-        label: 'Coffee Maker',
-        imgSrc: 'data/thumbnails/mug.png'
-      },
-      { 
-        src: 'data/demo_vids/package_demo.mp4', 
-        label: 'Package',
-        imgSrc: 'data/thumbnails/package.png'
-      }
-    ]
-  });
+  // // Video-only carousel 2 (using video list approach)
+  // const videoCarousel2 = new VideoCarousel({
+  //   containerId: 'videoCarousel2',
+  //   slideRowId: 'video-objs-scroll-2',
+  //   videoContainerId: 'video-display-2',
+  //   prevBtnId: 'video-slide-arrow-prev-2',
+  //   nextBtnId: 'video-slide-arrow-next-2',
+  //   videos: [
+  //     { 
+  //       src: 'data/demo_vids/tiger_demo.mp4', 
+  //       label: 'Tiger',
+  //       imgSrc: 'data/thumbnails/tiger.png'
+  //     },
+  //     { 
+  //       src: 'data/demo_vids/mug_demo.mp4', 
+  //       label: 'Coffee Maker',
+  //       imgSrc: 'data/thumbnails/mug.png'
+  //     },
+  //     { 
+  //       src: 'data/demo_vids/package_demo.mp4', 
+  //       label: 'Package',
+  //       imgSrc: 'data/thumbnails/package.png'
+  //     }
+  //   ]
+  // });
 });
