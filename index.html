@@ -17,6 +17,7 @@
       --sidebar-active: var(--accent);
       --title-font: 'Inter', system-ui, sans-serif;
       --body-font: 'Inter', system-ui, sans-serif;
+      --sidebar-width: max(20vw, 180px);
     }
 
     * {
@@ -35,13 +36,14 @@
     }
 
     .sidebar {
-      width: 240px;
+      width: var(--sidebar-width);
       position: fixed;
       height: 100vh;
       overflow-y: auto;
       background: #fff;
       border: none;
       padding: 2rem 1rem;
+      text-align: right;
     }
 
     .sidebar h2 {
@@ -75,8 +77,11 @@
     }
 
     main {
-      margin-left: 240px;
-      padding: 0;
+      /* margin-left: var(--sidebar-width); */
+      margin: auto;
+      width: calc(80% - var(--sidebar-width));
+      max-width: 1000px;
+      padding: 0 2rem;
       box-sizing: border-box;
     }
 
@@ -193,8 +198,12 @@
       .sidebar {
         display: none;
       }
+      :root {
+        --sidebar-width: 0;
+      }
       main {
         margin-left: 0;
+        width: 100%;
         padding: 0;
       }
       .main-content {
